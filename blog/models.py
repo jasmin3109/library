@@ -22,7 +22,6 @@ class Book(models.Model):
     title = models.CharField(max_length=100)
     author = models.CharField(max_length=100)
     category = models.ForeignKey(Category,on_delete=models.CASCADE,related_name='books')
-
     total_copies = models.IntegerField()
     available_copies = models.IntegerField()
 
@@ -40,4 +39,5 @@ class Borrowing(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.book}"
+
 

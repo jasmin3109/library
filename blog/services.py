@@ -13,7 +13,7 @@ def borrow_book(data):
             user_id=data["user"],
             book=book,
             due_date=data["due_date"],
-            status = ["ACTIVE"]
+            status=["ACTIVE"]
         )
 
         book.available_copies -= 1

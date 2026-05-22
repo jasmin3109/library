@@ -3,6 +3,7 @@ from .models import User, Category, Book, Borrowing
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.core.cache import cache
+from django.shortcuts import render
 from django.db import transaction
 from django.utils import timezone
 
@@ -94,3 +95,7 @@ class BookViewSet(viewsets.ModelViewSet):
         cache.set("books", serializer.data, timeout=60 * 5)
 
         return Response(serializer.data)
+
+
+
+
