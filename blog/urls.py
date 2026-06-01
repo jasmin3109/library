@@ -13,6 +13,6 @@ router.register(r'borrowings', views.BorrowingViewSet, basename='borrowing')
 urlpatterns = [
     path('api/borrowings/borrow/', views.BorrowingViewSet.as_view({'post': 'borrow'}), name='borrowing-borrow'),
     path('api/borrowings/<int:pk>/return_book/', views.BorrowingViewSet.as_view({'post': 'return_book'}), name='borrowing-return-book'),
-
     path('api/', include(router.urls)),
 ]
+
