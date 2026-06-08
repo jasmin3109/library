@@ -38,9 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
-    'rest_framework',
     'corsheaders',
-
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -54,6 +53,17 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
+
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://localhost:3000",
+]
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    "http://localhost:3000",
+]
+CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'Kutubxona.urls'
 

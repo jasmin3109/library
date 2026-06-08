@@ -6,7 +6,9 @@ from django.core.cache import cache
 from django.shortcuts import render
 from django.db import transaction
 from django.utils import timezone
-
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
+from .serializers import RegisterSerializer
 from .serializers import (
     UserSerializer,
     CategorySerializer,
@@ -15,6 +17,28 @@ from .serializers import (
 )
 from .services import borrow_book
 
+
+class RegisterView(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request):
+        serializer = RegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            return Response({
+                "status": "success",
+                "message": "Muvaffaqiyatli ro'yxatdan o'tdingiz. Qoyil",
+                "data": {
+                    "id": user.id,
+                    "full_name": user.full_name,
+                    "phone": user.phone,
+                    "role": user.role
+                }
+            }, status=status.HTTP_201_CREATED)
+
+        return Response({
+            "status": "error",
+            "errors": serializer.errors
+        }, status=status.HTTP_400_BAD_REQUEST)
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()

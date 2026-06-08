@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import views
-
+from .views import RegisterView
 
 router = DefaultRouter()
 
@@ -14,5 +14,6 @@ urlpatterns = [
     path('api/borrowings/borrow/', views.BorrowingViewSet.as_view({'post': 'borrow'}), name='borrowing-borrow'),
     path('api/borrowings/<int:pk>/return_book/', views.BorrowingViewSet.as_view({'post': 'return_book'}), name='borrowing-return-book'),
     path('api/', include(router.urls)),
+    path('auth/register/', RegisterView.as_view(), name='register'),
 ]
 
