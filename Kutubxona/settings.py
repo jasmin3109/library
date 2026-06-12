@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'rest_framework',
 ]
 MIDDLEWARE = [
+    'django.middleware.csrf.CsrfViewMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -79,5 +80,5 @@ CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "http://localhost:3000",
-    "https://library-5w4z.onrender.com",
+    "https://library-frontend.onrender.com",
 ]

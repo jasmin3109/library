@@ -20,6 +20,7 @@ from .services import borrow_book
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]
+
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
@@ -39,6 +40,7 @@ class RegisterView(APIView):
             "status": "error",
             "errors": serializer.errors
         }, status=status.HTTP_400_BAD_REQUEST)
+
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -121,5 +123,10 @@ class BookViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
+class LoginView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        return Response({"message": "login ishladi"})
 
 
