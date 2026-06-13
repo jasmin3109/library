@@ -4,6 +4,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.core.cache import cache
 from django.shortcuts import render
+from django.contrib.auth import authenticate
 from django.db import transaction
 from django.utils import timezone
 from rest_framework.views import APIView
@@ -14,6 +15,8 @@ from .serializers import (
     CategorySerializer,
     BookSerializer,
     BorrowingSerializer
+
+
 )
 from .services import borrow_book
 
@@ -130,3 +133,50 @@ class LoginView(APIView):
         return Response({"message": "login ishladi"})
 
 
+from django.contrib.auth import authenticate
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
+
+class LoginView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        phone = request.data.get("phone")
+        password = request.data.get("password")
+
+        user = authenticate(username=phone, password=password)
+
+        if user is None:
+            return Response({"error": "Invalid credentials"}, status=400)
+
+        return Response({
+            "user": {
+                "id": user.id,
+                "full_name": user.full_name,
+                "phone": user.phone,
+                "role": user.role
+            }
+        })
+
+
+class LoginView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        phone = request.data.get("phone")
+        password = request.data.get("password")
+
+        user = authenticate(username=phone, password=password)
+
+        if user is None:
+            return Response({"error": "Invalid credentials"}, status=400)
+
+        return Response({
+            "user": {
+                "id": user.id,
+                "full_name": user.full_name,
+                "phone": user.phone,
+                "role": user.role
+            }
+        })
