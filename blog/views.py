@@ -3,7 +3,6 @@ from .models import User, Category, Book, Borrowing
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.core.cache import cache
-from django.contrib.auth.hashers import check_password
 from django.shortcuts import render
 from django.db import transaction
 from django.utils import timezone
@@ -128,17 +127,6 @@ class LoginView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        phone = request.data.get('phone')
-        password = request.data.get('password')
+        return Response({"message": "login ishladi"})
 
-        user = User.objects.filter(phone=phone).first()
 
-        if not user:
-            return Response({"error": "User topilmadi"}, status=400)
-
-        if not check_password(password, user.password):
-            return Response({"error": "Password noto‘g‘ri"}, status=400)
-
-        return Response({
-            "user": UserSerializer(user).data
-        })
