@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.db import models
 from .models import User, Category, Book, Borrowing
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
@@ -49,14 +50,17 @@ class LoginSerializer(serializers.Serializer):
     phone = serializers.CharField(max_length=100)
     password = serializers.CharField(write_only=True)
     def validate(self, data):
-        phone = data.get("phone")
+        phone = data.get("phone").strip()
         password = data.get("password")
-        try:
-            user = User.objects.get(phone=phone)
-        except User.DoesNotExist:
+        if not phone.startswith('+'):
+            phone_with_plus = f"+{phone}"
+        else:
+            phone_with_plus = phone
+            phone = phone.replace('+', '')
+        user = User.objects.filter(models.Q(phone=phone) | models.Q(phone=phone_with_plus)).first()
+        if not user:
             raise serializers.ValidationError("Foydalanuvchi topilmadi yoki telefon raqam xato!")
         if not check_password(password, user.password):
             raise serializers.ValidationError("Parol noto'g'ri!")
         data["user"] = user
         return data
-
