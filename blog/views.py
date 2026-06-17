@@ -5,6 +5,10 @@ from rest_framework.response import Response
 from django.core.cache import cache
 from django.shortcuts import render
 from django.db import transaction
+import uuid
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from .serializers import LoginSerializer
 from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
@@ -123,10 +127,27 @@ class BookViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class LoginView(APIView):
     permission_classes = [AllowAny]
-
     def post(self, request):
-        return Response({"message": "login ishladi"})
-
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.validated_data["user"]
+            token_key = str(uuid.uuid4())
+            return Response({
+                "status": "success",
+                "message": "Muvaffaqiyatli tizimga kirdingiz!",
+                "token": token_key,
+                "user": {
+                    "id": user.id,
+                    "full_name": user.full_name,
+                    "phone": user.phone,
+                    "role": user.role
+                }
+            }, status=status.HTTP_200_OK)
+        return Response({
+            "status": "error",
+            "errors": serializer.errors
+        }, status=status.HTTP_400_BAD_REQUEST)
 
